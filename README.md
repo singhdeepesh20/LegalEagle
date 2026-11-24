@@ -1,160 +1,112 @@
 <div align="center">
 
-# LegalEagle — AI Contract Assistant
+# LegalEagle
 
-### Making Legal Documents Understandable, Searchable, and Actionable
+### Ask questions about a contract. Get answers grounded in its pages.
 
-</div>
+An open-source document Q&A app built with Streamlit, LangChain, FAISS, and Groq.
 
----
+[Get started](#-get-started) · [Try a question](#-try-a-question) · [How it works](#-how-it-works)
 
-## Overview
-
-**LegalEagle** is an AI-powered legal assistant designed to analyze contracts, agreements, and legal documents with speed and precision.
-
-By integrating **FAISS vector search, Hugging Face embeddings, and Groq’s high-performance LLM API**, the system enables users to extract insights, ask contextual questions, and understand complex legal content in seconds.
-
-The goal is to reduce the friction of legal comprehension and make **contract intelligence accessible to everyone**.
-
----
-
-## Key Features
-
-* 📄 **Contract Upload** → Upload legal PDFs (agreements, policies, contracts)
-* 🔎 **AI-Powered Q&A** → Ask questions in natural language and receive contextual answers
-* 📚 **Source Attribution** → View exact references from the document
-* ⚡ **High-Performance Stack** → Fast embeddings + ultra-low latency inference
-* 🔐 **Secure API Usage** → User-provided Groq API key at runtime
-* 🎯 **User-Friendly Interface** → Simple and intuitive experience
-
----
-
-## System Architecture
-
-```
-PDF Upload → Text Extraction → Embeddings (HuggingFace)
-        ↓
-     FAISS Vector Store
-        ↓
-User Query → LangChain Pipeline → Groq LLM → Contextual Answer
-```
-
----
-
-## Tech Stack
-
-* **Frontend**: Streamlit (Python-based UI)
-* **Backend**: LangChain + FAISS (vector search)
-* **Embeddings**: SentenceTransformers (Hugging Face)
-* **LLM**: Groq API (high-speed inference)
-* **Storage**: FAISS index + local document storage
-
----
-
-## Deployment
-
-This project uses Streamlit and should be deployed on a platform that runs a
-persistent Streamlit server, such as [Streamlit Community Cloud](https://share.streamlit.io/).
-Vercel's Python runtime expects an HTTP function export (`app`, `application`,
-or `handler`) and does not run this Streamlit application directly.
-
-To deploy on Streamlit Community Cloud:
-
-1. Push this repository to GitHub.
-2. In Streamlit Community Cloud, create an app from the repository's `main`
-   branch and set the app file to `app.py`.
-3. Deploy. The platform installs the dependencies from `requirements.txt`.
-4. Enter a Groq API key in the app when prompted.
-
-You can also configure `GROQ_API_KEY` as an environment variable on a hosting
-platform that supports it; the app will use it as the initial key field value.
-Uploaded contracts and the generated FAISS index are stored on the app's local
-filesystem, so they may not persist across redeployments or restarts. Do not
-upload documents unless you are comfortable with the hosting provider handling
-them.
-
----
-
-## Use Cases
-
-### 🏛️ Legal Professionals
-
-* Rapid contract review
-* Identification of clauses, risks, and obligations
-* Reduced manual workload
-
-### 📑 Businesses & Startups
-
-* Faster due diligence for agreements
-* Improved compliance checks
-* Risk minimization in contracts
-
-### 👨‍💼 General Users
-
-* Understand legal documents in simple language
-* Analyze employment, rental, or policy documents
-* Access legal insights without specialized knowledge
-
----
-
-## Engineering Approach
-
-### Retrieval-Augmented Generation (RAG)
-
-LegalEagle uses a RAG-based pipeline to ensure responses are:
-
-* Contextually grounded
-* Factually aligned with uploaded documents
-* Traceable via source references
-
-### Modular Design
-
-* Document ingestion and processing
-* Embedding and indexing
-* Query handling and response generation
-
-### Performance Optimization
-
-* FAISS for efficient similarity search
-* Groq for low-latency inference
-
----
-
-## What This Project Demonstrates
-
-* End-to-end LLM application development
-* Implementation of RAG pipelines
-* Integration of vector databases (FAISS)
-* Real-world AI system for document intelligence
-* Focus on usability + performance
-
----
-
-## Future Scope
-
-* Multi-document querying and comparison
-* Advanced clause detection and summarization
-* Integration with legal databases and APIs
-* Voice-based legal assistant
-* Deployment as SaaS platform
-
----
-
-## Vision
-
-LegalEagle aims to democratize legal understanding:
-
-* Make contracts transparent and accessible
-* Reduce dependency on expensive legal reviews
-* Enable faster, smarter decision-making
-
-In the long term, it can evolve into a **universal legal intelligence system** integrated across businesses, startups, and public platforms.
-
----
-
-<div align="center">
-
-### "Transforming legal complexity into clarity with AI."
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 </div>
 
+---
+
+## What it does
+
+LegalEagle lets you upload a PDF, ask a question in plain language, and review an answer alongside excerpts retrieved from the document. It creates embeddings locally with `sentence-transformers/all-MiniLM-L6-v2`, searches a FAISS index, and sends the retrieved context to Groq's `openai/gpt-oss-120b` model.
+
+> **This is a document assistant, not a lawyer.** Its output can be incomplete or incorrect. Verify important conclusions against the original document and consult a qualified legal professional.
+
+## Explore
+
+- [Features](#-features)
+- [Get started](#-get-started)
+- [Try a question](#-try-a-question)
+- [How it works](#-how-it-works)
+
+## ✨ Features
+
+- Upload a PDF contract or other legal document.
+- Ask free-form questions about the indexed document.
+- Review retrieved source excerpts with page numbers.
+- Keep your Groq API key out of source code by entering it in the password field or setting an environment variable.
+- Reuse a locally saved FAISS index between app runs when the host's filesystem persists.
+
+## 🚀 Get started
+
+### Requirements
+
+- Python 3.10 or later
+- A [Groq API key](https://console.groq.com/keys)
+
+### Install
+
+```bash
+git clone https://github.com/singhdeepesh20/LegalEagle.git
+cd LegalEagle
+python -m venv .venv
+```
+
+Activate the virtual environment:
+
+<details>
+<summary>macOS / Linux</summary>
+
+```bash
+source .venv/bin/activate
+```
+
+</details>
+
+<details>
+<summary>Windows PowerShell</summary>
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+</details>
+
+Install dependencies and start Streamlit:
+
+```bash
+python -m pip install -r requirements.txt
+streamlit run app.py
+```
+
+Open the local URL printed by Streamlit, enter your Groq API key, upload a PDF, and ask a question.
+
+## 💬 Try a question
+
+After uploading a document, try asking:
+
+- “What is the termination notice period?”
+- “How are payment dates and late fees described?”
+- “Which responsibilities does each party have?”
+- “Does the document describe renewal or cancellation?”
+
+These are example prompts, not guaranteed analyses. Answers depend on the document text retrieved for each question.
+
+## ⚙️ How it works
+
+```mermaid
+flowchart LR
+    A[PDF upload] --> B[Extract pages]
+    B --> C[Split into text chunks]
+    C --> D[Create embeddings]
+    D --> E[Save searchable FAISS index]
+    F[Question] --> G[Retrieve relevant chunks]
+    E --> G
+    G --> H[Groq language model]
+    H --> I[Answer and source excerpts]
+```
+
+1. `PyPDFLoader` extracts document pages.
+2. The text is split into overlapping chunks and embedded using Sentence Transformers.
+3. FAISS stores the vectors locally and retrieves up to five relevant chunks for a question.
+4. LangChain passes the question and retrieved context to Groq and returns the answer with source documents.
